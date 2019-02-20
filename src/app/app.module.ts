@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { WeatherComponent } from './weather/weather.component';
-//import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -15,7 +15,7 @@ import { WeatherComponent } from './weather/weather.component';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    //NgbModule,
+    NgbModule,
     BrowserModule,
     AppRoutingModule
   ],
