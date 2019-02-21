@@ -1,0 +1,57 @@
+<div class="container">
+  <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+    <button type="button" class="btn btn-secondary" (click)="updateProfile()">Update Profile</button>
+      <div class="form-group">
+        <label>
+          First Name :
+        </label>
+        <input type="text" class="form-control" formControlName="firstName">
+      </div>
+      <div class="form-group">
+        <label>
+          Last Name :
+        </label>
+        <input type="text" class="form-control" formControlName="lastName">
+      </div>
+    <div formGroupName="address">
+      <h4>Address :</h4>
+      <div class="form-group">
+        <label>
+          street :
+        </label>
+        <input type="text" class="form-control" formControlName="street">
+      </div>
+      <div class="form-group">
+        <label>
+          city :
+        </label>
+        <input type="text" class="form-control" formControlName="city">
+      </div>
+      <div class="form-group">
+        <label>
+          state :
+        </label>
+        <input type="text" class="form-control" formControlName="state">
+      </div>
+      <div class="form-group">
+        <label>
+          zip :
+        </label>
+        <input type="text" class="form-control" formControlName="zip">
+      </div>
+    </div>
+    <div formArrayName="aliases">
+      <h3>Aliases :</h3><button type="button" class="btn btn-secondary" (click)="addAlias()">Add Alias</button>
+      <div *ngFor="let element of aliases.controls; let i=index">
+        <label>Alias</label>
+        <input type="text" class="form-control" formControlName="{{i}}">
+      </div>
+    </div>
+
+    <button class="btn btn-primary" type="submit" [disabled]="!profileForm.valid">Save</button>
+    <p>
+      Form Validation : {{profileForm.status}}
+    </p>
+
+  </form>
+</div>

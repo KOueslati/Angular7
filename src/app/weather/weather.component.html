@@ -1,57 +1,19 @@
 <div class="container">
-  <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
-    <button type="button" class="btn btn-secondary" (click)="updateProfile()">Update Profile</button>
-      <div class="form-group">
-        <label>
-          First Name :
-        </label>
-        <input type="text" class="form-control" formControlName="firstName">
+  <form [formGroup]="weatherForm">
+    <div formGroupName="searchGroup">
+      <div class="row">
+        <div class="col-md-3 form-group">
+          <label for="city">City</label>
+          <input id="city" placeholder="City" class="form-control" type="text" formControlName="city">
+        </div>
       </div>
-      <div class="form-group">
-        <label>
-          Last Name :
-        </label>
-        <input type="text" class="form-control" formControlName="lastName">
-      </div>
-    <div formGroupName="address">
-      <h4>Address :</h4>
-      <div class="form-group">
-        <label>
-          street :
-        </label>
-        <input type="text" class="form-control" formControlName="street">
-      </div>
-      <div class="form-group">
-        <label>
-          city :
-        </label>
-        <input type="text" class="form-control" formControlName="city">
-      </div>
-      <div class="form-group">
-        <label>
-          state :
-        </label>
-        <input type="text" class="form-control" formControlName="state">
-      </div>
-      <div class="form-group">
-        <label>
-          zip :
-        </label>
-        <input type="text" class="form-control" formControlName="zip">
+      <div class="row">
+        <div class="col-md-3 form-group">
+          <label for="country">Country</label>
+          <input id="country" placeholder="Country" class="form-control" type="text" formControlName="country">
+        </div>
       </div>
     </div>
-    <div formArrayName="aliases">
-      <h3>Aliases :</h3><button type="button" class="btn btn-secondary" (click)="addAlias()">Add Alias</button>
-      <div *ngFor="let element of aliases.controls; let i=index">
-        <label>Alias</label>
-        <input type="text" class="form-control" formControlName="{{i}}">
-      </div>
-    </div>
-
-    <button class="btn btn-primary" type="submit" [disabled]="!profileForm.valid">Save</button>
-    <p>
-      Form Validation : {{profileForm.status}}
-    </p>
-
+    <button class="btn btn-secondary" type="button">Load</button>
   </form>
 </div>
