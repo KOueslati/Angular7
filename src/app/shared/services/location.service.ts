@@ -1,18 +1,25 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Constants} from '../constants';
+import { HttpClient } from '@angular/common/http';
+import { Constants } from '../constants';
+import { Observable, of } from 'rxjs';
+import { Country } from '../models/country';
+import { catchError, tap } from 'rxjs/operators';
+import { HandleErrorService } from '../handleErrorService';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocationService {
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private http: HttpClient, private handleErrorService: HandleErrorService) { }
 
-  getCountries(){
-    return this.httpClient.get(Constants.resourceUrl + '/countries?apikey='+ Constants.apikey)
-      .map((res: Response) => {
-        res.json();
-    })
+  getCountries(): Observable<Country[]> {
+    const uri = decodeURIComponent(`${Constants.resourceUrl}/countries?apikey=${Constants.apikey}`);
+
+    return this.http.get<Country[]>(uri).pipe(
+      tap(_ => console.log('fetched countries'),
+      catchError(this.handleErrorService.handleError('getCountries', []))
+      ));
   }
 }
+

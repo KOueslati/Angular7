@@ -10,7 +10,8 @@
       <div class="row">
         <div class="col-md-3 form-group">
           <label for="country">Country</label>
-          <input id="country" placeholder="Country" class="form-control" type="text" formControlName="country">
+          <!-- <input id="country" placeholder="Country" class="form-control" type="text" formControlName="country"> -->
+          <input type="text" formControlName="country" ng-model="selected" uib-typeahead="state for state in states | filter:viewValue | limitTo:5" class="form-control">
         </div>
       </div>
     </div>
