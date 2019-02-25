@@ -1,5 +1,5 @@
 export interface Country{
-  id : string,
-  localizedName: string,
-  englishName: string
+  ID: string;
+  LocalizedName: string;
+  EnglishName: string;
 }

@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { LocationService } from '../shared/services/location.service';
 import { Country } from '../shared/models/country';
-import { resolve } from 'url';
-import { reject } from 'q';
-import { error } from 'util';
+import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
+import { Subject, Observable, merge } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-weather',
@@ -14,6 +14,11 @@ import { error } from 'util';
 export class WeatherComponent implements OnInit {
   private weatherForm: FormGroup;
   private countries: Country[];
+
+  @ViewChild('instanceCountry') instance: NgbTypeahead;
+  focus$ = new Subject<string>();
+  click$ = new Subject<string>();
+
   constructor(private fb: FormBuilder, private locationService: LocationService) { }
 
   async ngOnInit() {
@@ -54,4 +59,15 @@ export class WeatherComponent implements OnInit {
     });
   }
 
+  formatterCountry = (country: Country) => country.EnglishName;
+
+  searchCountry = (text$: Observable<string>) => {
+    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+    const clickWithoutClosedPopup$ = this.click$.pipe(filter(() => !this.instance.isPopupOpen()));
+    const inputFocus$ = this.focus$;
+
+    return merge(debouncedText$, inputFocus$, clickWithoutClosedPopup$).pipe(
+      map(val => val === '' ? this.countries.slice(0, 10)
+        : this.countries.filter(c => c.EnglishName.toLowerCase().indexOf(val.toLowerCase()) > -1).slice(0, 10)));
+  }
 }

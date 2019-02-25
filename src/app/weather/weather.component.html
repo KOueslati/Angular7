@@ -10,11 +10,19 @@
       <div class="row">
         <div class="col-md-3 form-group">
           <label for="country">Country</label>
-          <!-- <input id="country" placeholder="Country" class="form-control" type="text" formControlName="country"> -->
-          <input type="text" formControlName="country" ng-model="selected" uib-typeahead="state for state in states | filter:viewValue | limitTo:5" class="form-control">
+
+          <input type="text" id="country" class="form-control" formControlName="country" placeholder="Country"
+          [ngbTypeahead] ="searchCountry" [resultFormatter]="formatterCountry" [inputFormatter]="formatterCountry"
+          (focus)="focus$.next($event.target.value)"
+          (click)="click$.next($event.target.value)"
+          #instanceCountry="ngbTypeahead"
+          autocomplete="off" editable="false" [focusFirst]="false"
+
+          >
         </div>
+
       </div>
+      <button class="btn btn-secondary" type="button">Load</button>
     </div>
-    <button class="btn btn-secondary" type="button">Load</button>
   </form>
 </div>
