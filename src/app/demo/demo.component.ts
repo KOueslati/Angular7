@@ -26,11 +26,11 @@ export class DemoComponent {
 
   updateProfile() {
     this.profileForm.patchValue({
-      firstName: "",
-      lastName: "Oueslati",
+      firstName: '',
+      lastName: 'Oueslati',
       address: {
-        city: "Marseille",
-        street: "7 boulevard saint martin"
+        city: 'Marseille',
+        street: '7 boulevard saint martin'
       }
     });
   }
@@ -38,7 +38,7 @@ export class DemoComponent {
   saveProfile() {
     this.profileForm.patchValue({
      address: {
-       zip: "75017"
+       zip: '75017'
       }
     });
   }

@@ -1,26 +1,22 @@
 <div class="container">
   <form [formGroup]="weatherForm">
     <div formGroupName="searchGroup">
-      <div class="row">
-        <div class="col-md-3 form-group">
-          <label for="city">City</label>
-          <input id="city" placeholder="City" class="form-control" type="text" formControlName="city">
-        </div>
-      </div>
+
       <div class="row">
         <div class="col-md-3 form-group">
           <label for="country">Country</label>
 
           <input type="text" id="country" class="form-control" formControlName="country" placeholder="Country"
-          [ngbTypeahead] ="searchCountry" [resultFormatter]="formatterCountry" [inputFormatter]="formatterCountry"
-          (focus)="focus$.next($event.target.value)"
-          (click)="click$.next($event.target.value)"
-          #instanceCountry="ngbTypeahead"
-          autocomplete="off" editable="false" [focusFirst]="false"
-
-          >
+            [ngbTypeahead]="searchCountry" [resultFormatter]="formatterCountry" [inputFormatter]="formatterCountry"
+            (focus)="focus$.next($event.target.value)" (click)="click$.next($event.target.value)"
+            #instanceCountry="ngbTypeahead" autocomplete="off" editable="false" [focusFirst]="false">
         </div>
-
+      </div>
+      <div class="row">
+        <div class="col-md-3 form-group">
+          <label for="city">City</label>
+          <input id="city" placeholder="City" class="form-control" type="text" formControlName="city">
+        </div>
       </div>
       <button class="btn btn-secondary" type="button">Load</button>
     </div>

@@ -1,4 +1,4 @@
-export interface Country{
+export interface Country {
   ID: string;
   LocalizedName: string;
   EnglishName: string;
