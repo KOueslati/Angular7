@@ -5,8 +5,10 @@ import { Country } from '../shared/models/country';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, Observable, merge } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
-import {City} from '../shared/models/city';
-import { Console } from '@angular/core/src/console';
+import { City } from '../shared/models/city';
+import { Weather } from '../shared/models/weather';
+import { CurrentConditionsService } from '../shared/services/current-conditions.service';
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-weather',
@@ -17,23 +19,22 @@ export class WeatherComponent implements OnInit {
   private weatherForm: FormGroup;
   private countries: Country[];
   private city: City;
-
-  get cityControl(): FormControl {
-    return this.weatherForm.get('searchGroup.City') as FormControl;
-  }
-
-  public get countryControl(): FormControl {
-    return this.weatherForm.get('searchGroup.Country') as FormControl;
-  }
-
-
-
-
+  private weather: Weather;
+  private messageError: string;
   @ViewChild('instanceCountry') instance: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
 
-  constructor(private fb: FormBuilder, private locationService: LocationService) { }
+  get cityControl(): FormControl {
+    return this.weatherForm.get('searchGroup.city') as FormControl;
+  }
+
+  public get countryControl(): FormControl {
+    return this.weatherForm.get('searchGroup.country') as FormControl;
+  }
+
+  // tslint:disable-next-line: max-line-length
+  constructor(private fb: FormBuilder, private locationService: LocationService, private currentConditionsService: CurrentConditionsService) { }
 
   async ngOnInit() {
     this.weatherForm = this.buildFormGroup();
@@ -87,22 +88,25 @@ export class WeatherComponent implements OnInit {
         : this.countries.filter(c => c.EnglishName.toLowerCase().indexOf(val.toLowerCase()) > -1).slice(0, 10)));
   }
 
+
+
   async getCitiesAsync() {
     const countrySelected = this.countryControl.value;
     const searchText = this.cityControl.value;
     if (countrySelected as Country) {
       const countryCode = (countrySelected as Country).ID;
       const promise = new Promise((resolve, reject) => {
-        this.locationService.getCities(searchText, countryCode)
+        this.locationService.getCities(searchText, null)
           .toPromise()
           .then(res => {
-              const cities = (res as City[]);
-              if (cities.length === 0) {
-                  reject(`There are no location found for this ${searchText}`);
-               }
-              this.city = cities[0];
-              resolve();
-            },
+            const cities = (res as City[]);
+            if (cities.length === 0) {
+              this.messageError = `There are no location found for this ${searchText}`;
+              console.error(this.messageError);
+            }
+            this.city = cities[0];
+            resolve();
+          },
             err => {
               reject(err);
             }
@@ -117,5 +121,34 @@ export class WeatherComponent implements OnInit {
         });
       }
     }
+  }
+
+  async getCurrentConditions() {
+    const promise = new Promise((resolve, reject) => {
+      this.currentConditionsService.getCurrentCondition(this.city.Key)
+        .toPromise()
+        .then(conditions => {
+          if (conditions.length === 0) {
+            this.messageError = 'weather is not available';
+            console.error(this.messageError);
+          }
+
+          this.weather = new Weather(this.city, conditions[0]);
+          resolve();
+        },
+          error => reject(error));
+    });
+
+    await promise;
+  }
+
+  async search() {
+    this.weather = null;
+    this.messageError = null;
+// tslint:disable-next-line: max-line-length
+    if (!this.city || this.city.EnglishName !== (this.cityControl.value as string) || !this.city.Key || ! this.city.Country || !this.city.Country.ID) {
+      await this.getCitiesAsync();
+    }
+    await this.getCurrentConditions();
   }
 }

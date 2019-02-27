@@ -15,7 +15,7 @@ export class LocationService {
   constructor(private http: HttpClient, private handleErrorService: HandleErrorService) { }
 
   getCountries(): Observable<Country[]> {
-    const uri = decodeURIComponent(`${Constants.resourceUrl}/countries?apikey=${Constants.apikey}`);
+    const uri = decodeURIComponent(`${Constants.resourceLocationUrl}/countries?apikey=${Constants.apikey}`);
 
     return this.http.get<Country[]>(uri).pipe(
       tap(_ => console.log('fetched countries'),
@@ -25,8 +25,11 @@ export class LocationService {
 
   getCities(searchText: string, countryCode: string): Observable<any> {
     // tslint:disable-next-line: max-line-length
-    const uri = countryCode ? decodeURIComponent(`${Constants.resourceUrl}/cities/${countryCode}/search?apiKey=${Constants.apikey}&q=${searchText}`)
-                            : decodeURIComponent(`${Constants.resourceUrl}/cities/search?apiKey=${Constants.apikey}&q=${searchText}`);
+    const uri = decodeURIComponent(`${Constants.resourceLocationUrl}/cities/search?apikey=${Constants.apikey}&q=${searchText}`);
+// tslint:disable-next-line: max-line-length
+    // countryCode ? decodeURIComponent(`${Constants.resourceLocationUrl}/cities/${countryCode}/search?apiKey=${Constants.apikey}&q=${searchText}`)
+    // tslint:disable-next-line: max-line-length
+    // : decodeURIComponent(`${Constants.resourceLocationUrl}/cities/search?apikey=cBkEL8xz6LaysFK3EvA0ivmSnSSyPUfT&q=${searchText}`);
 
     return this.http.get<City[]>(uri).pipe(
       map(res => (res as City[]).map(c => {

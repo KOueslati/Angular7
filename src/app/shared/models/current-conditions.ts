@@ -3,6 +3,7 @@ export interface CurrentConditions {
   WeatherText: string;
   WeatherIcon: string;
   IsDayTime: boolean;
+  Temperature: Temperature;
 }
 export interface Metric {
   Value: number;

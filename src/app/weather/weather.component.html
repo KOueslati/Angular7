@@ -1,4 +1,35 @@
 <div class="container">
+  <div>
+    <div *ngIf="!weather">
+      <div class="invisible"></div>
+      <div>{{messageError}}</div>
+    </div>
+    <div class="city" *ngIf="weather">
+      <h1>{{ weather.Location | uppercase }}</h1>
+      <div class="row">
+        <table class="table table-light">
+          <tbody>
+            <tr>
+              <td><img src="{{weather.WeatherIconUrl}}" class="img-thumbnail"></td>
+              <td><span>{{weather.WeatherText}}</span></td>
+            </tr>
+            <tr>
+                <td>
+                  <ng-container *ngIf="weather.IsDayTime; then thenTemplate; else elseTemplate"></ng-container>
+                  <ng-template #thenTemplate>
+                    <span>DayTime</span>
+                  </ng-template>
+                  <ng-template #elseTemplate>
+                    <span>Night</span>
+                  </ng-template>
+                </td>
+                <td><span>{{weather.TemperatureValue}}&deg;{{weather.TemperatureUnit}}</span></td>
+              </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
   <form [formGroup]="weatherForm">
     <div formGroupName="searchGroup">
 
@@ -18,7 +49,7 @@
           <input id="city" placeholder="City" class="form-control" type="text" formControlName="city">
         </div>
       </div>
-      <button class="btn btn-secondary" type="button">Load</button>
+      <button class="btn btn-secondary" type="button" [disabled]="!weatherForm.valid" (click)="search()">Go</button>
     </div>
   </form>
 </div>
