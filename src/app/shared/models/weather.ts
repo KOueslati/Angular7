@@ -14,7 +14,7 @@ export class Weather {
     this.WeatherText = currentConditions.WeatherText;
     this.IsDayTime = currentConditions.IsDayTime;
     if (currentConditions.WeatherIcon) {
-      this.WeatherIconUrl = `../assets/images/${currentConditions.WeatherIcon}.png`;
+      this.WeatherIconUrl = `/assets/images/${currentConditions.WeatherIcon}.png`;
     }
     if (currentConditions.Temperature != null && currentConditions.Temperature.Metric != null) {
       this.TemperatureUnit = currentConditions.Temperature.Metric.Unit;
